@@ -87,12 +87,14 @@
             overflow: hidden;
             border: 1px solid rgba(217,4,41,0.3);
             box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+            background: #111;
         }
         .gym-showcase img {
             width: 100%;
-            height: auto;
+            height: 250px; /* Fixed height to prevent layout shifts */
+            object-fit: cover;
             display: block;
-            transition: transform 0.3s ease;
+            transition: transform 0.5s ease, opacity 0.5s ease;
         }
         .gym-showcase:hover img {
             transform: scale(1.05);
@@ -180,7 +182,6 @@
             <img src="gym.logo.png" alt="Muscle Matrix Logo" class="gym-logo-img">
             <h1 class="gym-name">Muscle Matrix</h1>
             <div class="gym-sub">THE FITNESS HUB</div>
-            <!-- FIXED ERROR HERE -->
             <div class="prop-name">Prop: Dr. Ashokkh</div>
         </header>
 
@@ -200,9 +201,9 @@
             <i class="fa-solid fa-map-location-dot"></i><span>Navigate to Gym</span>
         </a>
 
-        <!-- NEW DUMBBELL/GYM IMAGE SECTION ADDED HERE -->
+        <!-- DYNAMIC SHOWCASE CAROUSEL (SHRUNK, COMPRESSED IMAGES) -->
         <div class="gym-showcase fade-in-scroll">
-            <img src="https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?q=80&w=1000&auto=format&fit=crop" alt="Gym Dumbbells">
+            <img id="showcase-img" src="https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?auto=format&fit=crop&q=50&w=600&fm=webp" alt="Gym Equipment Showcase">
         </div>
 
         <!-- WHY CHOOSE US -->
@@ -297,13 +298,13 @@
 
     <!-- JAVASCRIPT ENGINE -->
     <script>
-        // 1. DYNAMIC BACKGROUND IMAGE CHANGER (EVERY 10s)
+        // 1. DYNAMIC BACKGROUND CHANGER (Optimized WebP Images, q=50, w=800 to shrink size)
         const bgImages = [
-            'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=1470&auto=format&fit=crop', // Gym wide
-            'https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?q=80&w=1470&auto=format&fit=crop', // Dumbbells
-            'https://images.unsplash.com/photo-1517836357463-d25dfeac3438?q=80&w=1470&auto=format&fit=crop', // Workout body
-            'https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?q=80&w=1470&auto=format&fit=crop', // Equipment
-            'https://images.unsplash.com/photo-1540497077202-7c8a3999166f?q=80&w=1470&auto=format&fit=crop'  // Weights
+            'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&q=50&w=800&fm=webp', 
+            'https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?auto=format&fit=crop&q=50&w=800&fm=webp', 
+            'https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&fit=crop&q=50&w=800&fm=webp', 
+            'https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?auto=format&fit=crop&q=50&w=800&fm=webp', 
+            'https://images.unsplash.com/photo-1540497077202-7c8a3999166f?auto=format&fit=crop&q=50&w=800&fm=webp'
         ];
         
         let bgIndex = 0;
@@ -313,12 +314,29 @@
             bgSlider.style.backgroundImage = `url('${bgImages[bgIndex]}')`;
             bgIndex = (bgIndex + 1) % bgImages.length;
         }
-        
-        // Initialize and set interval for backgrounds
         changeBackground();
         setInterval(changeBackground, 10000);
 
-        // 2. SCROLL VFX ANIMATION
+        // 2. DYNAMIC SHOWCASE IMAGE CHANGER (Optimized WebP, w=600)
+        const showcaseImages = [
+            'https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?auto=format&fit=crop&q=50&w=600&fm=webp',
+            'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?auto=format&fit=crop&q=50&w=600&fm=webp',
+            'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&q=50&w=600&fm=webp'
+        ];
+        let showcaseIndex = 0;
+        const showcaseImgEl = document.getElementById('showcase-img');
+        
+        function changeShowcase() {
+            showcaseImgEl.style.opacity = 0; // Fade out
+            setTimeout(() => {
+                showcaseIndex = (showcaseIndex + 1) % showcaseImages.length;
+                showcaseImgEl.src = showcaseImages[showcaseIndex];
+                showcaseImgEl.style.opacity = 1; // Fade in
+            }, 500); 
+        }
+        setInterval(changeShowcase, 6000); // Change showcase image every 6 seconds
+
+        // 3. SCROLL VFX ANIMATION
         const observerOptions = { threshold: 0.1, rootMargin: "0px 0px -50px 0px" };
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
@@ -330,18 +348,18 @@
 
         document.querySelectorAll('.fade-in-scroll').forEach(el => observer.observe(el));
 
-        // 3. SOUND EFFECTS (SFX)
+        // 4. SOUND EFFECTS (SFX)
         const clickAudio = document.getElementById('sfx-click');
         const successAudio = document.getElementById('sfx-success');
         
         document.querySelectorAll('.click-sfx').forEach(btn => {
             btn.addEventListener('click', () => {
                 clickAudio.currentTime = 0;
-                clickAudio.play().catch(e => console.log('Audio autoplay blocked'));
+                clickAudio.play().catch(e => console.log('Audio autoplay blocked by browser'));
             });
         });
 
-        // 4. AI REVIEW GENERATOR & CLIPBOARD SCRIPT (40+ VARIATIONS)
+        // 5. AI REVIEW GENERATOR & CLIPBOARD SCRIPT
         const reviews = [
             "Muscle Matrix is hands down the best gym in town! Jerai equipment is top-notch.",
             "Absolutely amazing vibe! The trainers here are highly certified and very helpful.",
@@ -387,21 +405,16 @@
         ];
 
         function generateAndRedirect() {
-            // Play success SFX
             successAudio.currentTime = 0;
-            successAudio.play().catch(e => console.log('Audio autoplay blocked'));
+            successAudio.play().catch(e => console.log('Audio autoplay blocked by browser'));
 
-            // Select random AI review
             const randomReview = reviews[Math.floor(Math.random() * reviews.length)];
             
-            // Copy to clipboard
             navigator.clipboard.writeText(randomReview).then(() => {
                 alert("✅ 5-Star Review copied to clipboard!\n\nPreview: \"" + randomReview + "\"\n\nRedirecting to Google Maps... Just paste it!");
-                // Redirect to Google Reviews
                 window.location.href = "https://search.google.com/local/reviews?placeid=ChIJ9yzK1C1ZNDoRhOa2XZ85Rj4&q=*&authuser=0&hl=en&gl=IN";
             }).catch(err => {
                 console.error('Could not copy text: ', err);
-                // Fallback redirect if clipboard fails
                 window.location.href = "https://search.google.com/local/reviews?placeid=ChIJ9yzK1C1ZNDoRhOa2XZ85Rj4&q=*&authuser=0&hl=en&gl=IN";
             });
         }
