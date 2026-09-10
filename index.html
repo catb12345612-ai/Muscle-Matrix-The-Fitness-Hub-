@@ -118,7 +118,7 @@
         /* REVIEW SECTION (AUTO CLIPBOARD) */
         .review-section { text-align: center; background: rgba(217,4,41,0.1); padding: 30px; border-radius: 15px; border: 1px dashed var(--red); margin: 40px 0; }
         .review-btn { background: var(--red); color: var(--white); font-size: 1.1rem; font-weight: 700; padding: 15px 30px; border: none; border-radius: 30px; cursor: pointer; text-transform: uppercase; transition: 0.3s; width: 100%; box-shadow: 0 0 20px rgba(217,4,41,0.6); animation: pulse 2s infinite; }
-        .review-btn:hover { background: var(--white); color: var(--red); }
+        .review-btn:hover { background: var(--white); color: var(--red); box-shadow: 0 0 25px rgba(255,255,255,0.8); }
         .review-note { font-size: 0.75rem; color: #aaa; margin-top: 10px; }
 
         /* TRAINERS */
@@ -128,39 +128,47 @@
         .trainer-exp { color: var(--red); font-size: 0.8rem; font-weight: 700; }
         .trainer-skills { font-size: 0.8rem; color: #bbb; line-height: 1.4; }
 
-        /* FOOTER / DEVELOPER INFO */
-        .footer { text-align: center; padding: 40px 0 20px; margin-top: 40px; border-top: 1px solid #333; }
+        /* FOOTER / DEVELOPER INFO - SHRUNK & COMPACT */
+        .footer { text-align: center; padding: 30px 0 15px; margin-top: 40px; border-top: 1px solid #333; }
         .dev-badge { 
             display: inline-flex; 
             flex-direction: column; 
             align-items: center;
             background: #111; 
-            padding: 20px 30px; 
-            border-radius: 20px; 
+            padding: 10px 20px; /* Reduced padding */
+            border-radius: 15px; 
             border: 1px solid #333; 
-            font-size: 0.9rem; 
+            font-size: 0.75rem; /* Smaller text */
             color: #aaa; 
             text-decoration: none; 
             transition: 0.3s; 
-            box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+            box-shadow: 0 5px 10px rgba(0,0,0,0.5);
         }
-        .dev-badge:hover { background: #1a0000; border-color: var(--red); transform: translateY(-5px); box-shadow: 0 10px 25px rgba(217,4,41,0.4); }
+        .dev-badge:hover { background: #1a0000; border-color: var(--red); transform: translateY(-3px); box-shadow: 0 5px 15px rgba(217,4,41,0.4); }
         .dev-logo-img {
-            width: 120px;
-            height: 120px;
+            width: 60px; /* Reduced logo size */
+            height: 60px;
             border-radius: 50%;
             border: 2px solid var(--red);
-            margin-bottom: 10px;
+            margin-bottom: 8px;
             object-fit: cover;
-            box-shadow: 0 0 15px rgba(217,4,41,0.5);
+            box-shadow: 0 0 10px rgba(217,4,41,0.5);
             transition: 0.3s;
         }
         .dev-badge:hover .dev-logo-img { transform: rotate(5deg) scale(1.05); }
-        .dev-badge span { color: var(--white); font-weight: 800; font-family: 'Oswald', sans-serif; letter-spacing: 1px; font-size: 1.1rem; margin-top: 5px;}
+        .dev-badge span { color: var(--white); font-weight: 700; font-family: 'Oswald', sans-serif; letter-spacing: 1px; font-size: 0.95rem; margin-top: 3px;}
+
+        /* COPYRIGHT TEXT */
+        .copyright-text {
+            font-size: 0.7rem;
+            color: #666;
+            margin-top: 15px;
+            letter-spacing: 0.5px;
+        }
 
         /* ANIMATIONS (VFX) */
         @keyframes fadeInDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); box-shadow: 0 0 25px rgba(217,4,41,0.8); } 100% { transform: scale(1); } }
+        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.03); box-shadow: 0 0 25px rgba(217,4,41,0.8); } 100% { transform: scale(1); } }
         
         .fade-in-scroll { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease, transform 0.6s ease; }
         .fade-in-scroll.visible { opacity: 1; transform: translateY(0); }
@@ -179,7 +187,7 @@
         
         <!-- HEADER WITH GYM LOGO -->
         <header class="header-section">
-            <img src="gym.logo.png" alt="Muscle Matrix Logo" class="gym-logo-img">
+            <img src="gym.logo.png" alt="Muscle Matrix Logo" class="gym-logo-img click-sfx">
             <h1 class="gym-name">Muscle Matrix</h1>
             <div class="gym-sub">THE FITNESS HUB</div>
             <div class="prop-name">Prop: Dr. Ashokkh</div>
@@ -240,11 +248,11 @@
         <!-- AUTO-GENERATED REVIEW SECTION -->
         <div class="review-section fade-in-scroll">
             <h3 style="margin-bottom: 10px; font-family: 'Oswald'; font-size: 1.5rem;">Support Our Hustle</h3>
-            <p style="font-size: 0.9rem; margin-bottom: 20px; color: #ddd;">Click below. Our AI will automatically copy a 5-star review for you to paste on Google!</p>
-            <button class="review-btn" onclick="generateAndRedirect()">
+            <p style="font-size: 0.9rem; margin-bottom: 20px; color: #ddd;">Click below. Our AI will automatically generate a 5-star review!</p>
+            <button class="review-btn click-sfx" id="reviewBtnMain" onclick="generateAndRedirect()">
                 <i class="fa-brands fa-google"></i> Drop a 5-Star Review
             </button>
-            <div class="review-note">Clicking copies text & opens Google automatically. Just hit Paste!</div>
+            <div class="review-note">System automatically copies text & opens Google Maps. Just hit Paste!</div>
         </div>
 
         <!-- TRAINERS -->
@@ -292,6 +300,7 @@
                 <img src="dev-logo.png (1).png" alt="Developer Logo" class="dev-logo-img">
                 Developed & Engineered by <br> <span>SYED ZEESHAAN ALI</span>
             </a>
+            <div class="copyright-text">&copy; 2026 Copyright of syedzeeshaanali07. All Rights Reserved.</div>
         </footer>
 
     </div>
@@ -359,7 +368,7 @@
             });
         });
 
-        // 5. AI REVIEW GENERATOR & CLIPBOARD SCRIPT
+        // 5. AI REVIEW GENERATOR & SINGLE-TAP AUTO-DIRECT
         const reviews = [
             "Muscle Matrix is hands down the best gym in town! Jerai equipment is top-notch.",
             "Absolutely amazing vibe! The trainers here are highly certified and very helpful.",
@@ -405,16 +414,39 @@
         ];
 
         function generateAndRedirect() {
+            const btn = document.getElementById('reviewBtnMain');
+            
+            // Play success sound
             successAudio.currentTime = 0;
             successAudio.play().catch(e => console.log('Audio autoplay blocked by browser'));
 
+            // Select random AI review
             const randomReview = reviews[Math.floor(Math.random() * reviews.length)];
             
+            // Write to clipboard and perform visual auto-redirect
             navigator.clipboard.writeText(randomReview).then(() => {
-                alert("✅ 5-Star Review copied to clipboard!\n\nPreview: \"" + randomReview + "\"\n\nRedirecting to Google Maps... Just paste it!");
-                window.location.href = "https://search.google.com/local/reviews?placeid=ChIJ9yzK1C1ZNDoRhOa2XZ85Rj4&q=*&authuser=0&hl=en&gl=IN";
+                
+                // Visual Button Change (VFX)
+                const originalText = btn.innerHTML;
+                btn.innerHTML = '<i class="fa-solid fa-check-circle"></i> Copied! Redirecting...';
+                btn.style.backgroundColor = '#28a745'; // Green success color
+                btn.style.boxShadow = '0 0 20px #28a745';
+                btn.style.color = '#fff';
+                
+                // Redirect automatically after a short delay
+                setTimeout(() => {
+                    window.location.href = "https://search.google.com/local/reviews?placeid=ChIJ9yzK1C1ZNDoRhOa2XZ85Rj4&q=*&authuser=0&hl=en&gl=IN";
+                    
+                    // Reset button back to normal (if the user navigates back)
+                    setTimeout(() => {
+                        btn.innerHTML = originalText;
+                        btn.style = '';
+                    }, 2000);
+                }, 1200);
+
             }).catch(err => {
                 console.error('Could not copy text: ', err);
+                // Fallback direct navigation
                 window.location.href = "https://search.google.com/local/reviews?placeid=ChIJ9yzK1C1ZNDoRhOa2XZ85Rj4&q=*&authuser=0&hl=en&gl=IN";
             });
         }
