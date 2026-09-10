@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MUSCLE MATRIX - THE FITNESS HUB</title>
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
+    
+    <style>
+        /* CORE VARIABLES */
+        :root {
+            --black: #050505;
+            --red: #D90429;
+            --white: #FFFFFF;
+            --glass-bg: rgba(5, 5, 5, 0.85);
+        }
+
+        /* RESET & BASE */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Poppins', sans-serif;
+            color: var(--white);
+            background-color: var(--black);
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        /* DYNAMIC BACKGROUND (CHANGES EVERY 10s) */
+        #bg-slider {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            z-index: -1;
+            background-size: cover;
+            background-position: center;
+            transition: background-image 1.5s ease-in-out;
+            filter: brightness(0.3) contrast(1.2);
+        }
+
+        /* LAYOUT & CONTAINERS */
+        .container {
+            max-width: 600px; /* Mobile focused for scanners */
+            margin: 0 auto;
+            background: var(--glass-bg);
+            backdrop-filter: blur(8px);
+            min-height: 100vh;
+            padding: 20px;
+            box-shadow: 0 0 30px rgba(217, 4, 41, 0.2);
+        }
+
+        /* HEADER & LOGO */
+        .header-section { text-align: center; padding: 30px 0; border-bottom: 2px solid var(--red); animation: fadeInDown 1s ease; }
+        
+        .gym-logo-img {
+            width: 250px;
+            max-width: 90%;
+            height: auto;
+            margin-bottom: 15px;
+            border-radius: 15px;
+            box-shadow: 0 0 20px rgba(217, 4, 41, 0.6);
+            border: 2px solid rgba(217, 4, 41, 0.3);
+            transition: transform 0.3s ease;
+        }
+        .gym-logo-img:hover { transform: scale(1.05); }
+
+        .gym-name { font-family: 'Oswald', sans-serif; font-size: 2.5rem; font-weight: 700; text-transform: uppercase; line-height: 1.1; letter-spacing: 2px; }
+        .gym-sub { font-size: 1rem; color: #ccc; margin-top: 5px; }
+        .prop-name { background: var(--red); display: inline-block; padding: 5px 15px; margin-top: 15px; font-weight: 600; font-size: 0.9rem; border-radius: 20px; text-transform: uppercase; }
+
+        /* CONTACT & SOCIALS */
+        .contact-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin: 25px 0; }
+        .contact-btn {
+            background: rgba(255,255,255,0.05); padding: 15px; border-radius: 10px; text-align: center;
+            color: var(--white); text-decoration: none; border: 1px solid rgba(217,4,41,0.3);
+            transition: all 0.3s ease; display: flex; flex-direction: column; align-items: center; justify-content: center;
+        }
+        .contact-btn:hover { background: var(--red); transform: translateY(-5px); box-shadow: 0 5px 15px rgba(217,4,41,0.5); }
+        .contact-btn i { font-size: 1.5rem; margin-bottom: 5px; }
+
+        /* SECTION TITLES */
+        .section-title { font-family: 'Oswald', sans-serif; font-size: 1.8rem; color: var(--red); margin: 30px 0 15px; text-transform: uppercase; display: flex; align-items: center; gap: 10px; }
+        .section-title::after { content: ''; flex: 1; height: 1px; background: var(--red); opacity: 0.5; }
+
+        /* WHY CHOOSE US */
+        .features-list { display: flex; flex-wrap: wrap; gap: 10px; }
+        .feature-tag { background: #111; border-left: 3px solid var(--red); padding: 10px 15px; font-size: 0.85rem; font-weight: 600; border-radius: 0 5px 5px 0; width: calc(50% - 5px); }
+
+        /* PROGRAMS & FACILITIES */
+        .programs-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .program-card { background: linear-gradient(45deg, #000, #1a0000); border: 1px solid var(--red); padding: 15px; text-align: center; border-radius: 8px; font-weight: 600; font-size: 0.9rem; text-transform: uppercase; }
+        
+        .facility-banner { background: var(--white); color: var(--black); padding: 10px; text-align: center; font-weight: 800; margin-top: 15px; border-radius: 5px; font-size: 0.9rem; }
+        .facility-banner i { color: var(--red); }
+
+        /* REVIEW SECTION (AUTO CLIPBOARD) */
+        .review-section { text-align: center; background: rgba(217,4,41,0.1); padding: 30px; border-radius: 15px; border: 1px dashed var(--red); margin: 40px 0; }
+        .review-btn { background: var(--red); color: var(--white); font-size: 1.1rem; font-weight: 700; padding: 15px 30px; border: none; border-radius: 30px; cursor: pointer; text-transform: uppercase; transition: 0.3s; width: 100%; box-shadow: 0 0 20px rgba(217,4,41,0.6); animation: pulse 2s infinite; }
+        .review-btn:hover { background: var(--white); color: var(--red); }
+        .review-note { font-size: 0.75rem; color: #aaa; margin-top: 10px; }
+
+        /* TRAINERS */
+        .trainer-card { background: #111; margin-bottom: 15px; padding: 15px; border-radius: 10px; border-left: 4px solid var(--white); display: flex; flex-direction: column; gap: 5px; transition: 0.3s; }
+        .trainer-card:hover { border-left-color: var(--red); background: #1a1a1a; transform: translateX(5px); }
+        .trainer-name { font-family: 'Oswald', sans-serif; font-size: 1.3rem; color: var(--white); text-transform: uppercase; }
+        .trainer-exp { color: var(--red); font-size: 0.8rem; font-weight: 700; }
+        .trainer-skills { font-size: 0.8rem; color: #bbb; line-height: 1.4; }
+
+        /* FOOTER / DEVELOPER INFO */
+        .footer { text-align: center; padding: 40px 0 20px; margin-top: 40px; border-top: 1px solid #333; }
+        .dev-badge { 
+            display: inline-flex; 
+            flex-direction: column; 
+            align-items: center;
+            background: #111; 
+            padding: 20px 30px; 
+            border-radius: 20px; 
+            border: 1px solid #333; 
+            font-size: 0.9rem; 
+            color: #aaa; 
+            text-decoration: none; 
+            transition: 0.3s; 
+            box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+        }
+        .dev-badge:hover { background: #1a0000; border-color: var(--red); transform: translateY(-5px); box-shadow: 0 10px 25px rgba(217,4,41,0.4); }
+        .dev-logo-img {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            border: 2px solid var(--red);
+            margin-bottom: 10px;
+            object-fit: cover;
+            box-shadow: 0 0 15px rgba(217,4,41,0.5);
+            transition: 0.3s;
+        }
+        .dev-badge:hover .dev-logo-img { transform: rotate(5deg) scale(1.05); }
+        .dev-badge span { color: var(--white); font-weight: 800; font-family: 'Oswald', sans-serif; letter-spacing: 1px; font-size: 1.1rem; margin-top: 5px;}
+
+        /* ANIMATIONS (VFX) */
+        @keyframes fadeInDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); box-shadow: 0 0 25px rgba(217,4,41,0.8); } 100% { transform: scale(1); } }
+        
+        .fade-in-scroll { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease, transform 0.6s ease; }
+        .fade-in-scroll.visible { opacity: 1; transform: translateY(0); }
+    </style>
+</head>
+<body>
+
+    <!-- DYNAMIC BACKGROUND -->
+    <div id="bg-slider"></div>
+
+    <!-- UI SOUND EFFECT (SFX) -->
+    <audio id="sfx-click" src="https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3"></audio>
+    <audio id="sfx-success" src="https://assets.mixkit.co/active_storage/sfx/1435/1435-preview.mp3"></audio>
+
+    <div class="container">
+        
+        <!-- HEADER WITH GYM LOGO -->
+        <header class="header-section">
+            <img src="gym.logo.jpg" alt="Muscle Matrix Logo" class="gym-logo-img">
+            <h1 class="gym-name">Muscle Matrix</h1>
+            <div class="gym-sub">THE FITNESS HUB</div>
+            <div class="prop-name">Prop: Dr. Ashokkh (Anesthesiologist)</div>
+        </header>
+
+        <!-- CONTACT & SOCIALS -->
+        <div class="contact-grid">
+            <a href="https://wa.me/919391396113" class="contact-btn click-sfx" target="_blank">
+                <i class="fa-brands fa-whatsapp"></i><span>WhatsApp</span>
+            </a>
+            <a href="tel:9391396113" class="contact-btn click-sfx">
+                <i class="fa-solid fa-phone"></i><span>Call Us</span>
+            </a>
+            <a href="https://www.instagram.com/muscle_matrix_kmm_?stkn=c2k2aTFnMmZwNjFh&utm_source=qr" class="contact-btn click-sfx" target="_blank">
+                <i class="fa-brands fa-instagram"></i><span>Instagram</span>
+            </a>
+        </div>
+        <a href="https://www.google.com/maps?cid=4487337435356128900" class="contact-btn click-sfx" target="_blank" style="flex-direction: row; gap: 10px; width: 100%; margin-bottom: 20px;">
+            <i class="fa-solid fa-map-location-dot"></i><span>Navigate to Gym</span>
+        </a>
+
+        <!-- WHY CHOOSE US -->
+        <h2 class="section-title fade-in-scroll">Why Choose Us...? <i class="fa-solid fa-fire"></i></h2>
+        <div class="features-list fade-in-scroll">
+            <div class="feature-tag">Fitness Analysis</div>
+            <div class="feature-tag">Experienced Trainers</div>
+            <div class="feature-tag">Premium Equipment</div>
+            <div class="feature-tag">100% Result Driven</div>
+            <div class="feature-tag" style="width: 100%;">World Class: Jerai Equipment</div>
+            <div class="feature-tag">Hygienic Maintenance</div>
+            <div class="feature-tag">Expert Certified Coaches</div>
+            <div class="feature-tag">Aesthetic Ambience</div>
+            <div class="feature-tag">Central AC</div>
+        </div>
+
+        <!-- PROGRAMS -->
+        <h2 class="section-title fade-in-scroll">Our Programs <i class="fa-solid fa-running"></i></h2>
+        <div class="programs-grid fade-in-scroll">
+            <div class="program-card">Weight Loss</div>
+            <div class="program-card">Personal Training</div>
+            <div class="program-card">Muscle Building</div>
+            <div class="program-card">Strength / Cond.</div>
+        </div>
+        
+        <div class="facility-banner fade-in-scroll">
+            <i class="fa-solid fa-bolt"></i> TRANSFORMATIONS: BEFORE & AFTER CLIENT RESULTS
+        </div>
+        <div class="facility-banner fade-in-scroll" style="background: var(--red); color: white;">
+            <i class="fa-solid fa-mug-hot" style="color:white;"></i> COMPLEMENTARY BLACK COFFEE / GREEN TEA <br> & STEAM BATH
+        </div>
+
+        <!-- AUTO-GENERATED REVIEW SECTION -->
+        <div class="review-section fade-in-scroll">
+            <h3 style="margin-bottom: 10px; font-family: 'Oswald'; font-size: 1.5rem;">Support Our Hustle</h3>
+            <p style="font-size: 0.9rem; margin-bottom: 20px; color: #ddd;">Click below. Our AI will automatically copy a 5-star review for you to paste on Google!</p>
+            <button class="review-btn" onclick="generateAndRedirect()">
+                <i class="fa-brands fa-google"></i> Drop a 5-Star Review
+            </button>
+            <div class="review-note">Clicking copies text & opens Google automatically. Just hit Paste!</div>
+        </div>
+
+        <!-- TRAINERS -->
+        <h2 class="section-title fade-in-scroll">Meet The Experts <i class="fa-solid fa-users"></i></h2>
+        
+        <div class="trainer-card fade-in-scroll">
+            <div class="trainer-name">1. Kranthi</div>
+            <div class="trainer-exp">7 Years Experience | Specialist Nutritionist</div>
+            <div class="trainer-skills">Weight Loss • Weight Gain • Muscle Building</div>
+        </div>
+        
+        <div class="trainer-card fade-in-scroll">
+            <div class="trainer-name">2. Rajesh</div>
+            <div class="trainer-exp">10 Years Experience | Certified Coach</div>
+            <div class="trainer-skills">WL • WG • MB • Strength/Conditioning</div>
+        </div>
+
+        <div class="trainer-card fade-in-scroll">
+            <div class="trainer-name">3. Surya</div>
+            <div class="trainer-exp">8 Years Experience | Masterlads Fitness</div>
+            <div class="trainer-skills">Certified Boxing Coach • Fitness Coach</div>
+        </div>
+
+        <div class="trainer-card fade-in-scroll">
+            <div class="trainer-name">4. Raheem</div>
+            <div class="trainer-exp">10 Years Experience | Certified Coach</div>
+            <div class="trainer-skills">WL • WG • MB • Strength/Conditioning</div>
+        </div>
+
+        <div class="trainer-card fade-in-scroll">
+            <div class="trainer-name">5. Tillu</div>
+            <div class="trainer-exp">6 Years Experience | Certified Coach</div>
+            <div class="trainer-skills">WL • WG • MB • Cross-Fit • Strength/Conditioning</div>
+        </div>
+
+        <div class="trainer-card fade-in-scroll">
+            <div class="trainer-name">6. Surya</div>
+            <div class="trainer-exp">2 Years Experience</div>
+            <div class="trainer-skills">Basic Workout Coach</div>
+        </div>
+
+        <!-- FOOTER / DEVELOPER LOGO -->
+        <footer class="footer fade-in-scroll">
+            <a href="https://catb12345612-ai.github.io/Syed-Zeeshaan-Ali-High-Fledged-Engineering-And-Digital-Tech-Solutions-REVIEW/" target="_blank" class="dev-badge click-sfx">
+                <img src="dev-logo.png (1).jpg" alt="Developer Logo" class="dev-logo-img">
+                Developed & Engineered by <br> <span>SYED ZEESHAAN ALI</span>
+            </a>
+        </footer>
+
+    </div>
+
+    <!-- JAVASCRIPT ENGINE -->
+    <script>
+        // 1. DYNAMIC BACKGROUND IMAGE CHANGER (EVERY 10s)
+        const bgImages = [
+            'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=1470&auto=format&fit=crop', // Gym wide
+            'https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?q=80&w=1470&auto=format&fit=crop', // Dumbbells
+            'https://images.unsplash.com/photo-1517836357463-d25dfeac3438?q=80&w=1470&auto=format&fit=crop', // Workout body
+            'https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?q=80&w=1470&auto=format&fit=crop', // Equipment
+            'https://images.unsplash.com/photo-1540497077202-7c8a3999166f?q=80&w=1470&auto=format&fit=crop'  // Weights
+        ];
+        
+        let bgIndex = 0;
+        const bgSlider = document.getElementById('bg-slider');
+        
+        function changeBackground() {
+            bgSlider.style.backgroundImage = `url('${bgImages[bgIndex]}')`;
+            bgIndex = (bgIndex + 1) % bgImages.length;
+        }
+        
+        // Initialize and set interval for backgrounds
+        changeBackground();
+        setInterval(changeBackground, 10000);
+
+        // 2. SCROLL VFX ANIMATION
+        const observerOptions = { threshold: 0.1, rootMargin: "0px 0px -50px 0px" };
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.fade-in-scroll').forEach(el => observer.observe(el));
+
+        // 3. SOUND EFFECTS (SFX)
+        const clickAudio = document.getElementById('sfx-click');
+        const successAudio = document.getElementById('sfx-success');
+        
+        document.querySelectorAll('.click-sfx').forEach(btn => {
+            btn.addEventListener('click', () => {
+                clickAudio.currentTime = 0;
+                clickAudio.play().catch(e => console.log('Audio autoplay blocked'));
+            });
+        });
+
+        // 4. AI REVIEW GENERATOR & CLIPBOARD SCRIPT (40+ VARIATIONS)
+        const reviews = [
+            "Muscle Matrix is hands down the best gym in town! Jerai equipment is top-notch.",
+            "Absolutely amazing vibe! The trainers here are highly certified and very helpful.",
+            "Dr. Ashokkh has created a phenomenal fitness hub. The central AC makes workouts so comfortable.",
+            "Kranthi gave me an amazing diet plan. Seeing 100% results in just weeks!",
+            "Rajesh is an incredible coach. His strength and conditioning knowledge is unmatched.",
+            "If you want aesthetic vibes and premium machines, Muscle Matrix is the only place to go.",
+            "The hygiene here is immaculate! Best gym experience I've ever had.",
+            "Surya's boxing routines are intense and fun. Highly recommend this gym!",
+            "Raheem helped me build serious muscle. The dedication of the trainers is world-class.",
+            "Cross-fit with Tillu is next level! The energy here is always positive.",
+            "Love the complementary black coffee before workouts and the steam bath after. Pure luxury!",
+            "Transformed my body entirely thanks to the team at Muscle Matrix. 5 stars!",
+            "Premium Jerai equipment and certified coaches. What more do you need?",
+            "Best fitness center. The management and trainers ensure you hit your goals safely.",
+            "Highly hygienic, great AC, and top-tier equipment. Best gym ever.",
+            "I joined for weight loss and the results have been exactly as promised. 100% recommended.",
+            "A true fitness hub! Beautiful interior, powerful equipment, and great staff.",
+            "They really do proper fitness analysis here before starting your program.",
+            "Great value for money. The facilities like steam bath and green tea are a great touch.",
+            "Top class gym! Every trainer is experienced and pays personal attention.",
+            "The atmosphere makes you want to push harder. Muscle Matrix is brilliant.",
+            "Excellent maintenance. The gym floors and machines are always squeaky clean.",
+            "Professionalism at peak. Dr. Ashokkh's vision for this gym is clearly visible.",
+            "Perfect place for muscle building. The dumbbell racks and machines are extensive.",
+            "Fantastic personal training! They tailor the workout exactly to your body type.",
+            "The before/after transformations of clients here are real and inspiring.",
+            "Awesome gym with world-class JERAI equipment. A must-join for fitness freaks.",
+            "I love the steam bath recovery sessions after heavy lifting. 5/5 stars.",
+            "Surya (basic coach) was super helpful when I was just starting out. Very welcoming gym.",
+            "Unbelievable energy! Best music, best AC cooling, best equipment.",
+            "They strictly focus on results. My strength has doubled since I joined.",
+            "Very safe and friendly environment for everyone. Highly recommend it.",
+            "Kranthi's nutritionist advice changed my life. Excellent holistic approach to fitness.",
+            "Best gym setup in the area. The lighting and aesthetics are perfect for workout videos.",
+            "Rajesh and Raheem are absolute beast trainers. You'll definitely see progress.",
+            "Great community, excellent equipment, and brilliant coaches. Muscle Matrix rocks!",
+            "I travel far just to train here because no other gym matches their quality.",
+            "If you are serious about fitness, this is the only gym you should join.",
+            "The equipment biomechanics are perfect. Jerai makes a huge difference.",
+            "Incredible experience. From coffee to intense workouts to steam bath, it's a complete package.",
+            "Muscle Matrix deserves more than 5 stars. Absolute perfection in gym management."
+        ];
+
+        function generateAndRedirect() {
+            // Play success SFX
+            successAudio.currentTime = 0;
+            successAudio.play().catch(e => console.log('Audio autoplay blocked'));
+
+            // Select random AI review
+            const randomReview = reviews[Math.floor(Math.random() * reviews.length)];
+            
+            // Copy to clipboard
+            navigator.clipboard.writeText(randomReview).then(() => {
+                alert("✅ 5-Star Review copied to clipboard!\n\nPreview: \"" + randomReview + "\"\n\nRedirecting to Google Maps... Just paste it!");
+                // Redirect to Google Reviews
+                window.location.href = "https://search.google.com/local/reviews?placeid=ChIJ9yzK1C1ZNDoRhOa2XZ85Rj4&q=*&authuser=0&hl=en&gl=IN";
+            }).catch(err => {
+                console.error('Could not copy text: ', err);
+                // Fallback redirect if clipboard fails
+                window.location.href = "https://search.google.com/local/reviews?placeid=ChIJ9yzK1C1ZNDoRhOa2XZ85Rj4&q=*&authuser=0&hl=en&gl=IN";
+            });
+        }
+    </script>
+</body>
+</html>
